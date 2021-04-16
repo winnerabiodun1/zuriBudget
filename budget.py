@@ -1,32 +1,33 @@
 # Create a budget class that can instantiate an object based on Food, clothing and entertainment
-class budget:
+class Budget:
     def __init__(self, name, amount):
         self.name=name    
         self.amount=amount
 
+# Depositing funds to each of the categories
+    def deposit (self, amount):
+        print("*****Deposit*****")
+        self.amount=self.amount+amount
+        return f"you have deposited {amount}, your current balance for {self.name} is {self.amount}"
+
 # Withdrawing funds from each category
-    def withdrawal(self, amount):
-        amount=int(input("Enter the amount you want to Withdraw: "))
+    def withdraw (self, amount):
+        print("*****Withdrawal*****")
         if amount>self.amount:
             return f"Insufficient funds, your balance for {self.name} is {self.amount}"
         else:
             self.amount=self.amount-amount
             return f"you have withdrawn {amount}, you have {self.amount} remaining for {self.name}"
 
-# Depositing funds to each of the categories
-    def deposit(self, amount):
-        amount=int(input("Enter the amount you want to Deposit: "))
-        self.amount=self.amount+amount
-        return f"you have deposited {amount}, your current balance for {self.name} is {self.amount}"
-
 # Computing category balance
     def balance (self):
+        print("*****Check you balance*****")
         current_balance= f"Your current balance for {self.name} is {self.amount} "
         return current_balance
 
-    # Transferring Balance amounts between categories
+# Transferring Balance amounts between categories
     def balance_transfer(self,amount,recipient):
-        amount=int(input("Enter the amount you want to Transfer: "))
+        print("*****Balance Transfer*****")
         if amount>self.amount:
             return f"Insufficient funds, your balance for {self.name} is {self.amount}"
         else:
@@ -35,84 +36,82 @@ class budget:
             transaction= f'You transferred {amount} from {self.name} to {recipient.name}\n'
             transaction+= f'Your current balance for {self.name} is {self.amount}\n'
             transaction+= f'Your current balance for {recipient.name} is {recipient.amount}'
-
             return transaction
 
+budgets=list()
 
-def food():
-    food_budget=budget("Food",0)
-    available_option=int(input("Select '1' to Deposit\nSelect '2' to Withdraw\nSelect '3' to Transfer\nSelect '4' to Check balance\n"))
-    if available_option==1:
-        print(food_budget.deposit(0))
+def create_budget():
+    print("*****Budget Creation*****")
+    budget_name=input("Enter the name of the budget you want to create: ")
+    budget_amount=int(input("Enter the amount you want to allocate to the budget: "))
+    new_budget=Budget(budget_name, budget_amount)
+    budgets.append(new_budget)
+    budget_app()
+
+def choose_budget():
+    if len(budgets)==0:
+        print("There are currently no budget created\nCreate a budget")
+        create_budget()
+    print("*****BUDGET CATEGORIES*****")
+    for items in budgets:
+        position=budgets.index(items)+1
+        print(f"{position}: {items.name}, {items.amount}")
+    
+    choice= int(input("Select your preferred budget: "))
+    items=budgets[choice-1]
+    budget_menu(items)
+
+def budget_menu(items):
+    print("*****Budget Menu*****")
+    print(""" What do you want to do?
+    1. Deposit
+    2. Withdrawal
+    3. Transfer
+    4. Check Balance
+    5. Return to main menu
+    """)
+    choice=int(input("Enter your answer==> "))
+    if choice==1:
+        amount_to_deposit=int(input("Enter the amount you want to deposit: "))
+        print(items.deposit(amount_to_deposit))
+        choose_budget()
+    elif choice==2:
+        amount_to_withdraw=int(input("Enter the amount you want to withdraw: "))
+        print(items.withdraw(amount_to_withdraw))
+        choose_budget()
+    elif choice==3:
+        amount_to_transfer=int(input("Enter the amount you want to transfer: "))
+        print("The following categories are available")
+        
+        for category in budgets:
+            position=budgets.index(category)
+            print(f"{position+1}. {category.name}, {category.amount}")
+        choice= int(input("Select the budget you want to transfer to: "))
+        category=budgets[choice-1]
+        receiving_category= category
+        print(items.balance_transfer(amount_to_transfer,receiving_category))
+        choose_budget()
+    elif choice==4:
+        items.balance()
+        choose_budget()
+    elif choice==5:
         budget_app()
-    elif available_option==2:
-        print(food_budget.withdrawal(0))
-        budget_app()
-    elif available_option==3:
-        print(food_budget.balance_transfer(0,""))
-        budget_app()
-    elif available_option==4:
-        print(food_budget.balance())
     else:
         print("Invalid option selected")
-
-def clothing():
-    clothing_budget=budget("clothings", 0)
-    available_option=int(input("Select '1' to Deposit\nSelect '2' to Withdraw\nSelect '3' to Transfer\nSelect '4' to Check balance\n"))
-    if available_option==1:
-        print(clothing_budget.deposit(0))
-        budget_app()
-    elif available_option==2:
-        print(clothing_budget.withdrawal(0))
-        budget_app()
-    elif available_option==3:
-        print(clothing_budget.balance_transfer(0,""))
-        budget_app()
-    elif available_option==4:
-        print(clothing_budget.balance())
-    else:
-        print("Invalid option selected")
-
-def entertainment():
-    entertainment_budget=budget("entertainment", 0)
-    available_option=int(input("Select '1' to Deposit\nSelect '2' to Withdraw\nSelect '3' to Transfer\nSelect '4' to Check balance\n"))
-    if available_option==1:
-        print(entertainment_budget.deposit(0))
-        budget_app()
-    elif available_option==2:
-        print(entertainment_budget.withdrawal(0))
-        budget_app()
-    elif available_option==3:
-        print(entertainment_budget.balance_transfer(0,""))
-        budget_app()
-    elif available_option==4:
-        print(entertainment_budget.balance())
-    else:
-        print("Invalid option selected")
+        budget_menu(items)
 
 def budget_app():
-    selected_option=int(input("You can perform the following budget transactions:\nSelect '1' for Food Budget\nSelect '2' for Clothing budget\nSelect '3' for Entertainment Budget\nSelect '4' to exit\n"))
+    selected_option=int(input("You can perform the following budget transactions:\nSelect '1' Create Budget\nSelect '2' to Choose a budget category\nSelect '3' to exit\n"))
     if selected_option==1:
-        food()
+        create_budget()
     elif selected_option==2:
-        clothing()
+        choose_budget()
     elif selected_option==3:
-        entertainment()
-    elif selected_option==4:
+        print("Goodbye")
         exit()
     else:
         print('invalid option selected')
         budget_app()
 
 
-
-
-food_budget=budget("Food",10000)
-clothing_budget=budget("clothings", 5000)
-# entertainment_budget=budget("entertainment", 2000)
-# # print(food_budget.balance())
-# print(clothing_budget.balance())
-# print(entertainment_budget.balance())
-# print(food_budget.withdrawal(4000))
-# print (food_budget.deposit(0))
-print(food_budget.balance_transfer(2000,clothing_budget))
+budget_app()
