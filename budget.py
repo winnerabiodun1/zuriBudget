@@ -46,11 +46,13 @@ def create_budget():
     budget_amount=int(input("Enter the amount you want to allocate to the budget: "))
     new_budget=Budget(budget_name, budget_amount)
     budgets.append(new_budget)
+    print("\n\n")
     budget_app()
 
 def choose_budget():
     if len(budgets)==0:
         print("There are currently no budget created\nCreate a budget")
+        print("\n\n")
         create_budget()
     print("*****BUDGET CATEGORIES*****")
     for items in budgets:
@@ -59,10 +61,12 @@ def choose_budget():
     
     choice= int(input("Select your preferred budget: "))
     items=budgets[choice-1]
+    print("\n\n")
     budget_menu(items)
 
 def budget_menu(items):
     print("*****Budget Menu*****")
+    print(f"You have selected {items.name} Budget category ")
     print(""" What do you want to do?
     1. Deposit
     2. Withdrawal
@@ -74,10 +78,13 @@ def budget_menu(items):
     if choice==1:
         amount_to_deposit=int(input("Enter the amount you want to deposit: "))
         print(items.deposit(amount_to_deposit))
+        print("\n\n")
+
         choose_budget()
     elif choice==2:
         amount_to_withdraw=int(input("Enter the amount you want to withdraw: "))
         print(items.withdraw(amount_to_withdraw))
+        print("\n\n")
         choose_budget()
     elif choice==3:
         amount_to_transfer=int(input("Enter the amount you want to transfer: "))
@@ -90,27 +97,36 @@ def budget_menu(items):
         category=budgets[choice-1]
         receiving_category= category
         print(items.balance_transfer(amount_to_transfer,receiving_category))
+        print("\n\n")
         choose_budget()
     elif choice==4:
-        items.balance()
+        print("\n\n")
+        print(items.balance())
+        print("\n\n")
         choose_budget()
     elif choice==5:
+        print("\n\n")
         budget_app()
     else:
         print("Invalid option selected")
+        print("\n\n")
         budget_menu(items)
 
 def budget_app():
     selected_option=int(input("You can perform the following budget transactions:\nSelect '1' Create Budget\nSelect '2' to Choose a budget category\nSelect '3' to exit\n"))
     if selected_option==1:
+        print("\n\n")
         create_budget()
     elif selected_option==2:
+        print("\n\n")
         choose_budget()
     elif selected_option==3:
         print("Goodbye")
+        print("\n\n")
         exit()
     else:
         print('invalid option selected')
+        print("\n\n")
         budget_app()
 
 
